@@ -47,12 +47,11 @@ class UserList(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class CampaignSearchList(APIView):
-    permission_classes = (permissions.AllowAny,)
 
     permission_classes = (permissions.AllowAny,)
-    @csrf_exempt
     def get(self, request, format=None):
-        camps = Campaign.objects.filter(title__icontains=request.data)
+        print(request.query_params)
+        camps = Campaign.objects.filter(title__icontains=request.query_params['title'])
         serializer = CampaignSerializer(camps, many=True)
         return Response(serializer.data)
 
