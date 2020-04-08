@@ -47,16 +47,9 @@ class UserList(APIView):
 class PredictList(APIView):
     permission_classes = (permissions.AllowAny,)
     def post(self, request, format=None):
-        # this view receives parameters from the submit html template and calls the API in azure
-        # this contains API code for Python and Python3 
-
-        # If you are using Python 3+, import urllib instead of urllib2
-        #import urllib2.request
+        
         import urllib
         import json 
-        print('hello')
-        # assign all the parameters to variables which you put in the API like the commented code
-        # or just put them in directly like I did farther down
 
         body = json.loads(request.body)
 
@@ -81,27 +74,44 @@ class PredictList(APIView):
                     }
                 }
 
-        # the API call
+        
         body = str.encode(json.dumps(data))
-        url = 'https://ussouthcentral.services.azureml.net/workspaces/1cd50493736146cab3ac55b235e0f510/services/947db55143f84ecd9e56a3fc63d21f56/execute?api-version=2.0&details=true'
-        api_key = 'aakk1woKsSfCqpT3J3IWbe8IN/MPHv95QbfUy6s0mGGmYSRsmwp5c8kBCtDV0kcoQxrrO/iL5gJTcfzl1X/zkA=='
-        # Replace my url and api_key with your own values
-        headers = {'Content-Type':'application/json', 'Authorization':('Bearer '+ api_key)}
 
-        # If you are using Python 3+, replace urllib2 with urllib.request
-        #req = urllib2.Request(url, body, headers)
-        req = urllib.request.Request(url, body, headers) 
+        #API Call for the Total Amount of Donations Received
+        url_amount = 'https://ussouthcentral.services.azureml.net/workspaces/1cd50493736146cab3ac55b235e0f510/services/947db55143f84ecd9e56a3fc63d21f56/execute?api-version=2.0&details=true'
+        api_key_amount = 'aakk1woKsSfCqpT3J3IWbe8IN/MPHv95QbfUy6s0mGGmYSRsmwp5c8kBCtDV0kcoQxrrO/iL5gJTcfzl1X/zkA=='
+        
+        headers = {'Content-Type':'application/json', 'Authorization':('Bearer '+ api_key_amount)}
 
-        # python3 uses urllib while python uses urllib2
-        #response = urllib2.request.urlopen(req)
+        req = urllib.request.Request(url_amount, body, headers) 
+
         response = urllib.request.urlopen(req)
 
-        # this formats the results 
-        result = response.read()
-        result = json.loads(result) # turns bits into json object
-        result = result["Results"]["output1"]["value"]["Values"][0]
-        # azure send the response as a weird result object. It would be wise to postman to find the 
-        # path to the response var value
+        result_amount = response.read()
+        result_amount = json.loads(result_amount)
+        result_amount = result_amount["Results"]["output1"]["value"]["Values"][0]
 
-        return Response(result) # this path assumes that this file is in the root directory in a folder named templates
+        
+        #API Call for the Number of Donors
+        url_donor = 'https://ussouthcentral.services.azureml.net/workspaces/c6cd80c3a6a645f8b5e5bd3774cb0c50/services/7cbe4f364c4d4283b42bed8361bcbd10/execute?api-version=2.0&details=true'
+        api_key_donor = 'krLzOimi0hlUSgVNlTrBxUflIxzK6TN+lrQhib6eVfP5BO9L9yBw+NidP9nyX3CoVPXaca0/aEgg4A4JTHscvA=='
+
+        headers = {'Content-Type':'application/json', 'Authorization':('Bearer '+ api_key_donor)}
+        
+        req = urllib.request.Request(url_donor, body, headers)
+
+        response = urllib.request.urlopen(req)
+
+        result_donor = response.read()
+        result_donor = json.loads(result_donor)
+        result_donor = result_donor['Results']['output1']['value']['Values'][0]
+
+        theResults = {
+            'amount': result_amount,
+            'donor': result_donor
+        }
+        
+        
+        
+        return Response(theResults) # this path assumes that this file is in the root directory in a folder named templates
         # the third parameter sends the result (the response variable value) to the template to be rendered
