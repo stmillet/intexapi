@@ -45,6 +45,7 @@ class UserList(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class PredictList(APIView):
+    permission_classes = (permissions.AllowAny,)
     def post(self, request, format=None):
         # this view receives parameters from the submit html template and calls the API in azure
         # this contains API code for Python and Python3 
@@ -101,5 +102,5 @@ class PredictList(APIView):
         # azure send the response as a weird result object. It would be wise to postman to find the 
         # path to the response var value
 
-        return render(request, "results.html", {"result": result}) # this path assumes that this file is in the root directory in a folder named templates
+        return Response(result) # this path assumes that this file is in the root directory in a folder named templates
         # the third parameter sends the result (the response variable value) to the template to be rendered
