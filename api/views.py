@@ -58,13 +58,15 @@ class PredictList(APIView):
         # assign all the parameters to variables which you put in the API like the commented code
         # or just put them in directly like I did farther down
 
-        title = str(request.POST['title'])
-        description = str(request.POST['description'])
-        auto_fb_post_mode = str(request.POST['auto_fb_post_mode'])
-        currencycode = str(request.POST['currencycode'])
-        has_beneficiary = str(request.POST['has_beneficiary'])
-        is_charity = str(request.POST['is_charity'])
-        charity_valid = str(request.POST['charity_valid'])
+        body = json.loads(request.body)
+
+        title = body['title']
+        description = body['description']
+        auto_fb_post_mode = body['auto_fb_post_mode']
+        currencycode = body['currencycode']
+        has_beneficiary = body['has_beneficiary']
+        is_charity = body['is_charity']
+        charity_valid = body['charity_valid']
 
         # formatting the data into a data object for the API call
         data =  {
@@ -98,7 +100,7 @@ class PredictList(APIView):
         # this formats the results 
         result = response.read()
         result = json.loads(result) # turns bits into json object
-        result = result["Results"]["output1"]["value"]["Values"][0][7] 
+        result = result["Results"]["output1"]["value"]["Values"][0]
         # azure send the response as a weird result object. It would be wise to postman to find the 
         # path to the response var value
 
