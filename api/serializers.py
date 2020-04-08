@@ -1,6 +1,16 @@
 from rest_framework import serializers
 from rest_framework_jwt.settings import api_settings
 from django.contrib.auth.models import User
+from api.models import Campaign
+
+class CampaignSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Campaign
+        fields = ('id', 'auto_fb_post_mode', 'currencycode', 'current_amount', 
+                    'goal', 'donators', 'days_active', 'title', 'description', 
+                    'has_beneficiary', 'status', 'deactivated', 'campaign_hearts', 
+                    'social_share_total', 'is_charity', 'location_country', 'charity_valid',
+                    'avg_donations', 'c_rating')
 
 class UserSerializer(serializers.ModelSerializer):
     
