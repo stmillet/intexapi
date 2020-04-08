@@ -5,9 +5,10 @@ from rest_framework import permissions, status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .serializers import UserSerializer, UserSerializerWithToken
+from .serializers import UserSerializer, UserSerializerWithToken, CampaignSerializer
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
+from api.models import Campaign
 
 # Create your views here.
 
@@ -121,3 +122,21 @@ class PredictList(APIView):
         
         return Response(theResults) # this path assumes that this file is in the root directory in a folder named templates
         # the third parameter sends the result (the response variable value) to the template to be rendered
+
+
+class CampaignList(APIView):
+    '''Get all products or create a product'''
+    permission_classes = (permissions.AllowAny,)
+    @csrf_exempt
+    def get(self, request, format=None):
+        camps = Campaign.objects.all()
+        serializer = CampaignSerializer(camps, many=True)
+        return Response(serializer.data)
+
+    @csrf_exempt
+    def post(self, request, format=None):
+        serializer = CampaignSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

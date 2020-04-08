@@ -10,7 +10,7 @@ class CampaignSerializer(serializers.ModelSerializer):
                     'goal', 'donators', 'days_active', 'title', 'description', 
                     'has_beneficiary', 'status', 'deactivated', 'campaign_hearts', 
                     'social_share_total', 'is_charity', 'location_country', 'charity_valid',
-                    'avg_donations', 'c_rating')
+                    'avg_donation', 'c_rating')
 
 class UserSerializer(serializers.ModelSerializer):
     

@@ -6,6 +6,7 @@ from django.dispatch import receiver
 class Campaign(models.Model):
     title = models.TextField()
     description = models.TextField()
+    current_amount = models.IntegerField()
     auto_fb_post_mode = models.BooleanField()
     currencycode = models.TextField()
     goal = models.IntegerField()
