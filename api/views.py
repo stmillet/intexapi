@@ -49,12 +49,11 @@ class UserList(APIView):
 class CampaignSearchList(APIView):
     permission_classes = (permissions.AllowAny,)
 
+    permission_classes = (permissions.AllowAny,)
+    @csrf_exempt
     def get(self, request, format=None):
-        search_fields = ['is_charity']
-        filter_backends = (filters.SearchFilter,)
-        queryset = Campaign.objects.all()
-        serializer = CampaignSerializer(queryset, many=True)
-
+        camps = Campaign.objects.filter(title__icontains=request.data)
+        serializer = CampaignSerializer(camps, many=True)
         return Response(serializer.data)
 
 
