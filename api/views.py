@@ -1,6 +1,7 @@
-from django.shortcuts import render
-from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework import permissions, status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -79,8 +80,8 @@ class PredictList(APIView):
         body = str.encode(json.dumps(data))
 
         #API Call for the Total Amount of Donations Received
-        url_amount = 'https://ussouthcentral.services.azureml.net/workspaces/1cd50493736146cab3ac55b235e0f510/services/947db55143f84ecd9e56a3fc63d21f56/execute?api-version=2.0&details=true'
-        api_key_amount = 'aakk1woKsSfCqpT3J3IWbe8IN/MPHv95QbfUy6s0mGGmYSRsmwp5c8kBCtDV0kcoQxrrO/iL5gJTcfzl1X/zkA=='
+        url_amount = 'https://ussouthcentral.services.azureml.net/workspaces/c6cd80c3a6a645f8b5e5bd3774cb0c50/services/07fc7eb0789a417c982530e44dda3582/execute?api-version=2.0&details=true'
+        api_key_amount = 'sBKCqFuxOLZAS9z8dxDW31s9fFMe3wE+mhjW2DuU1IMI7bhHu2U7NMvfuCxZHX33kHFQo7AgZOVii/ToSaqhsQ=='
         
         headers = {'Content-Type':'application/json', 'Authorization':('Bearer '+ api_key_amount)}
 
@@ -97,8 +98,8 @@ class PredictList(APIView):
 
         
         #API Call for the Number of Donors
-        url_donor = 'https://ussouthcentral.services.azureml.net/workspaces/c6cd80c3a6a645f8b5e5bd3774cb0c50/services/7cbe4f364c4d4283b42bed8361bcbd10/execute?api-version=2.0&details=true'
-        api_key_donor = 'krLzOimi0hlUSgVNlTrBxUflIxzK6TN+lrQhib6eVfP5BO9L9yBw+NidP9nyX3CoVPXaca0/aEgg4A4JTHscvA=='
+        url_donor = 'https://ussouthcentral.services.azureml.net/workspaces/c6cd80c3a6a645f8b5e5bd3774cb0c50/services/2641276d668847e9bf55c746e4cbff00/execute?api-version=2.0&details=true'
+        api_key_donor = 'f6yUVfKBYfpDzCoxjAy4m9JX3xDMgce2Df11FtJDDtINXO128xsU0LUK1IFEFMp714hTbgfNzhIiu3P3jdyPaw=='
 
         headers = {'Content-Type':'application/json', 'Authorization':('Bearer '+ api_key_donor)}
         
@@ -113,9 +114,26 @@ class PredictList(APIView):
         if result_donor < 0:
             result_donor = 0
 
+        url_avg = 'https://ussouthcentral.services.azureml.net/workspaces/c6cd80c3a6a645f8b5e5bd3774cb0c50/services/5448cc260ae242578c5e2645b596b79e/execute?api-version=2.0&details=true'
+        api_key_avg = '/inwECb5+kMpp/gV9icTUUuNc1bDHW+4MxdEzJxQS9lG2DBBZiSPa8BJ8ZEqSzgYOVvoSGqTP56ktI4chlUjpA=='
+
+        headers = {'Content-Type':'application/json', 'Authorization':('Bearer '+ api_key_avg)}
+        
+        req = urllib.request.Request(url_avg, body, headers)
+
+        response = urllib.request.urlopen(req)
+
+        result_avg = response.read()
+        result_avg = json.loads(result_avg)
+        result_avg = result_avg['Results']['output1']['value']['Values'][0][0]
+        result_avg = round(float(result_avg), 2)
+        if result_avg < 0:
+            result_avg = 0
+
         theResults = {
             'amount': result_amount,
-            'donor': result_donor
+            'donor': result_donor,
+            'avg_donor': result_avg
         }
         
         
