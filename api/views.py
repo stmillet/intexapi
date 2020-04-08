@@ -54,17 +54,17 @@ class PredictList(APIView):
         #import urllib2.request
         import urllib
         import json 
-
+        print('hello')
         # assign all the parameters to variables which you put in the API like the commented code
         # or just put them in directly like I did farther down
-
-        title = str(request.POST['title'])
-        description = str(request.POST['description'])
-        auto_fb_post_mode = str(request.POST['auto_fb_post_mode'])
-        currencycode = str(request.POST['currencycode'])
-        has_beneficiary = str(request.POST['has_beneficiary'])
-        is_charity = str(request.POST['is_charity'])
-        charity_valid = str(request.POST['charity_valid'])
+        print('data', request.data)
+        title = request.data['title']
+        description = request.data['description']
+        auto_fb_post_mode = request.data['auto_fb_post_mode']
+        currencycode = request.data['currencycode']
+        has_beneficiary = request.data['has_beneficiary']
+        is_charity = request.data['is_charity']
+        charity_valid = request.data['charity_valid']
 
         # formatting the data into a data object for the API call
         data =  {
@@ -93,11 +93,11 @@ class PredictList(APIView):
         # python3 uses urllib while python uses urllib2
         #response = urllib2.request.urlopen(req)
         response = urllib.request.urlopen(req)
-        print(response)
 
         # this formats the results 
         result = response.read()
         result = json.loads(result) # turns bits into json object
+        print(result)
         result = result["Results"]["output1"]["value"]["Values"][0][7] 
         # azure send the response as a weird result object. It would be wise to postman to find the 
         # path to the response var value
