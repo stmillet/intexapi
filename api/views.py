@@ -90,6 +90,9 @@ class PredictList(APIView):
         result_amount = response.read()
         result_amount = json.loads(result_amount)
         result_amount = result_amount["Results"]["output1"]["value"]["Values"][0][0]
+        result_amount = round(float(result_amount), 2)
+        if result_amount < 0:
+            result_amount = 0
 
         
         #API Call for the Number of Donors
@@ -105,6 +108,9 @@ class PredictList(APIView):
         result_donor = response.read()
         result_donor = json.loads(result_donor)
         result_donor = result_donor['Results']['output1']['value']['Values'][0][0]
+        result_donor = int(float(result_donor))
+        if result_donor < 0:
+            result_donor = 0
 
         theResults = {
             'amount': result_amount,
