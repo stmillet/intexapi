@@ -6,6 +6,8 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .serializers import UserSerializer, UserSerializerWithToken
+from django.contrib.auth.models import User
+from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 
@@ -17,6 +19,15 @@ def current_user(request):
     
     serializer = UserSerializer(request.user)
     return Response(serializer.data)
+
+class UserInfoList(APIView):
+    
+    permission_classes = (permissions.AllowAny,)
+    def post(self, request, format=None):
+        user = User.objects.get(username=request.data['username'])
+        print('test:', user.first_name)
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
 
 class UserList(APIView):
     """
