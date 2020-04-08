@@ -99,7 +99,7 @@ class PredictList(APIView):
         # this formats the results 
         result = response.read()
         result = json.loads(result) # turns bits into json object
-        result = result["Results"]["output1"]["value"]["Values"][0]
+        result = result["Results"]["output1"]["value"]["Values"][0][0]
         # azure send the response as a weird result object. It would be wise to postman to find the 
         # path to the response var value
 
