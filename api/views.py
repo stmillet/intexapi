@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
-from rest_framework import permissions, status
+from rest_framework import permissions, status, filters
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -45,6 +45,19 @@ class UserList(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class CampaignSearchList(APIView):
+    permission_classes = (permissions.AllowAny,)
+
+    def get(self, request, format=None):
+        search_fields = ['is_charity']
+        filter_backends = (filters.SearchFilter,)
+        queryset = Campaign.objects.all()
+        serializer = CampaignSerializer(queryset, many=True)
+
+        return Response(serializer.data)
+
+
 
 class PredictList(APIView):
     permission_classes = (permissions.AllowAny,)
@@ -114,26 +127,10 @@ class PredictList(APIView):
         if result_donor < 0:
             result_donor = 0
 
-        url_avg = 'https://ussouthcentral.services.azureml.net/workspaces/c6cd80c3a6a645f8b5e5bd3774cb0c50/services/5448cc260ae242578c5e2645b596b79e/execute?api-version=2.0&details=true'
-        api_key_avg = '/inwECb5+kMpp/gV9icTUUuNc1bDHW+4MxdEzJxQS9lG2DBBZiSPa8BJ8ZEqSzgYOVvoSGqTP56ktI4chlUjpA=='
-
-        headers = {'Content-Type':'application/json', 'Authorization':('Bearer '+ api_key_avg)}
-        
-        req = urllib.request.Request(url_avg, body, headers)
-
-        response = urllib.request.urlopen(req)
-
-        result_avg = response.read()
-        result_avg = json.loads(result_avg)
-        result_avg = result_avg['Results']['output1']['value']['Values'][0][0]
-        result_avg = round(float(result_avg), 2)
-        if result_avg < 0:
-            result_avg = 0
-
         theResults = {
             'amount': result_amount,
             'donor': result_donor,
-            'avg_donor': result_avg
+            'avg_donor': round(result_amount/result_donor, 2)
         }
         
         
