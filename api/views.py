@@ -156,38 +156,58 @@ class CampaignList(APIView):
         camps = Campaign.objects.all()
         if request.query_params.get('title'):
             camps = camps.filter(title__icontains=request.query_params.get('title'))
+        
+        if request.query_params.get('title2'):
+            camps = camps.filter(title__icontains=request.query_params.get('title2'))
+        
         if request.query_params.get('description'):
             camps = camps.filter(description__icontains=request.query_params.get('description'))
+        
         if request.query_params.get('currencycode'):
             camps = camps.filter(currencycode__icontains=request.query_params.get('currencycode'))
-        if request.query_params.get('current_amount'):
-            camps = camps.filter(current_amount__icontains=request.query_params.get('current_amount'))
+        
+        if request.query_params.get('current_amount_start') and request.query_params.get('current_amount_end'):
+            camps = camps.filter(current_amount__range=(request.query_params.get('current_amount_start'), request.query_params.get('current_amount_end')))
+        
         if request.query_params.get('auto_fb_post_mode'):
             camps = camps.filter(auto_fb_post_mode__icontains=request.query_params.get('auto_fb_post_mode'))
-        if request.query_params.get('goal'):
-            camps = camps.filter(goal__icontains=request.query_params.get('goal'))
-        if request.query_params.get('donators'):
-            camps = camps.filter(donators__icontains=request.query_params.get('donators'))
-        if request.query_params.get('days_active'):
-            camps = camps.filter(days_active__icontains=request.query_params.get('days_active'))
+        
+        if request.query_params.get('goal_start') and request.query_params.get('goal_end'):
+            camps = camps.filter(goal__range=(request.query_params.get('goal_start'), request.query_params.get('goal_end')))
+        
+        if request.query_params.get('donators_start') and request.query_params.get('donators_end'):
+            camps = camps.filter(donators__range=(request.query_params.get('donators_start'), request.query_params.get('donators_end')))
+        
+        if request.query_params.get('days_active_start') and request.query_params('days_active_end'):
+            camps = camps.filter(days_active__rang=(request.query_params.get('days_active'), request.query_params('days_active_end')))
+        
         if request.query_params.get('has_beneficiary'):
             camps = camps.filter(has_beneficiary__icontains=request.query_params.get('has_beneficiary'))
+        
         if request.query_params.get('status'):
             camps = camps.filter(status__icontains=request.query_params.get('status'))
+        
         if request.query_params.get('deactivated'):
             camps = camps.filter(deactivated__icontains=request.query_params.get('deactivated'))
-        if request.query_params.get('campaign_hearts'):
-            camps = camps.filter(campaign_hearts__icontains=request.query_params.get('campaign_hearts'))
-        if request.query_params.get('social_share_total'):
-            camps = camps.filter(social_share_total__icontains=request.query_params.get('social_share_total'))
+        
+        if request.query_params.get('campaign_hearts_start') and request.query_params('campaign_hearts_end'):
+            camps = camps.filter(campaign_hearts__range=(request.query_params.get('campaign_hearts_start'), request.query_params.get('campaign_hearts_end')))
+        
+        if request.query_params.get('social_share_total_start') and request.query_params.get('social_share_total_end'):
+            camps = camps.filter(social_share_total__range=(request.query_params.get('social_share_total_start'), request.query_params.get('social_share_total_end')))
+        
         if request.query_params.get('location_country'):
             camps = camps.filter(location_country__icontains=request.query_params.get('location_country'))
+        
         if request.query_params.get('is_charity'):
             camps = camps.filter(is_charity__icontains=request.query_params.get('is_charity'))
+        
         if request.query_params.get('charity_valid'):
             camps = camps.filter(charity_valid__icontains=request.query_params.get('charity_valid'))
-        if request.query_params.get('avg_donation'):
-            camps = camps.filter(avg_donation__icontains=request.query_params.get('avg_donation'))
+        
+        if request.query_params.get('avg_donation_start') and request.query_params.get('avg_donation_end'):
+            camps = camps.filter(avg_donation__range=(request.query_params.get('avg_donation_start'), request.query_params.get('avg_donation_end')))
+        
         if request.query_params.get('c_rating'):
             camps = camps.filter(c_rating__icontains=request.query_params.get('c_rating'))
 
