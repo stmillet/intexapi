@@ -94,7 +94,7 @@ def main():
             theCamp.save()
             print(p, theScore)
     else:
-        print('Already loaded')
+        print('Already Loaded')
 
 
 

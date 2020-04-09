@@ -155,13 +155,42 @@ class CampaignList(APIView):
     def get(self, request, format=None):
         camps = Campaign.objects.all()
         if request.query_params.get('title'):
-            camps = camps.filter(title__contains=request.query_params.get('title'))
+            camps = camps.filter(title__icontains=request.query_params.get('title'))
         if request.query_params.get('description'):
-            camps = camps.filter(description__contains=request.query_params.get('description'))
-        if request.query_params.get('price'):
-            camps = camps.filter(price__contains=request.query_params.get('price'))
-        if request.query_params.get('category'):
-            camps = camps.filter(category__title__contains=request.query_params.get('category'))
+            camps = camps.filter(description__icontains=request.query_params.get('description'))
+        if request.query_params.get('currencycode'):
+            camps = camps.filter(currencycode__icontains=request.query_params.get('currencycode'))
+        if request.query_params.get('current_amount'):
+            camps = camps.filter(current_amount__icontains=request.query_params.get('current_amount'))
+        if request.query_params.get('auto_fb_post_mode'):
+            camps = camps.filter(auto_fb_post_mode__icontains=request.query_params.get('auto_fb_post_mode'))
+        if request.query_params.get('goal'):
+            camps = camps.filter(goal__icontains=request.query_params.get('goal'))
+        if request.query_params.get('donators'):
+            camps = camps.filter(donators__icontains=request.query_params.get('donators'))
+        if request.query_params.get('days_active'):
+            camps = camps.filter(days_active__icontains=request.query_params.get('days_active'))
+        if request.query_params.get('has_beneficiary'):
+            camps = camps.filter(has_beneficiary__icontains=request.query_params.get('has_beneficiary'))
+        if request.query_params.get('status'):
+            camps = camps.filter(status__icontains=request.query_params.get('status'))
+        if request.query_params.get('deactivated'):
+            camps = camps.filter(deactivated__icontains=request.query_params.get('deactivated'))
+        if request.query_params.get('campaign_hearts'):
+            camps = camps.filter(campaign_hearts__icontains=request.query_params.get('campaign_hearts'))
+        if request.query_params.get('social_share_total'):
+            camps = camps.filter(social_share_total__icontains=request.query_params.get('social_share_total'))
+        if request.query_params.get('location_country'):
+            camps = camps.filter(location_country__icontains=request.query_params.get('location_country'))
+        if request.query_params.get('is_charity'):
+            camps = camps.filter(is_charity__icontains=request.query_params.get('is_charity'))
+        if request.query_params.get('charity_valid'):
+            camps = camps.filter(charity_valid__icontains=request.query_params.get('charity_valid'))
+        if request.query_params.get('avg_donation'):
+            camps = camps.filter(avg_donation__icontains=request.query_params.get('avg_donation'))
+        if request.query_params.get('c_rating'):
+            camps = camps.filter(c_rating__icontains=request.query_params.get('c_rating'))
+
         serializer = CampaignSerializer(camps, many=True)
         return Response(serializer.data)
 

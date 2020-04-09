@@ -21,5 +21,5 @@ class Campaign(models.Model):
     is_charity = models.BooleanField()
     charity_valid = models.BooleanField()
     avg_donation = models.DecimalField(max_digits=10, decimal_places=2)
-    c_rating = models.IntegerField(null=True, blank=True)
+    c_rating = models.DecimalField(max_digits=4, decimal_places=2)
 
