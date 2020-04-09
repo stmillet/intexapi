@@ -66,7 +66,7 @@ class PredictList(APIView):
         import urllib
         import json 
 
-        body = json.loads(request.body)
+        body = json.loads(request.body.decode('utf-8'))
 
         title = body['title']
         description = body['description']
