@@ -49,9 +49,9 @@ class UserList(APIView):
 class CampaignSearchList(APIView):
 
     permission_classes = (permissions.AllowAny,)
-    def get(self, request, format=None):
-        print(request.query_params)
-        camps = Campaign.objects.filter(title__icontains=request.query_params['title'])
+    def post(self, request, format=None):
+        print(request.data)
+        camps = Campaign.objects.filter(title__icontains=request.data['title'])
         serializer = CampaignSerializer(camps, many=True)
         return Response(serializer.data)
 
