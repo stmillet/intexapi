@@ -47,12 +47,14 @@ class UserList(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class CampaignSearchList(APIView):
-
     permission_classes = (permissions.AllowAny,)
-    def post(self, request, format=None):
-        print(request.data)
-        camps = Campaign.objects.filter(title__icontains=request.data['title'])
-        serializer = CampaignSerializer(camps, many=True)
+
+    def get(self, request, format=None):
+        search_fields = ['is_charity']
+        filter_backends = (filters.SearchFilter,)
+        queryset = Campaign.objects.all()
+        serializer = CampaignSerializer(queryset, many=True)
+
         return Response(serializer.data)
 
 
@@ -125,10 +127,16 @@ class PredictList(APIView):
         if result_donor < 0:
             result_donor = 0
 
+        print(result_donor)
+        if result_donor == 0:
+            avg_donor = 0
+        else:
+            avg_donor = round(result_amount/result_donor, 2)
+
         theResults = {
             'amount': result_amount,
             'donor': result_donor,
-            'avg_donor': round(result_amount/result_donor, 2)
+            'avg_donor': avg_donor
         }
         
         
@@ -143,6 +151,14 @@ class CampaignList(APIView):
     @csrf_exempt
     def get(self, request, format=None):
         camps = Campaign.objects.all()
+        if request.query_params.get('title'):
+            camps = camps.filter(title__contains=request.query_params.get('title'))
+        if request.query_params.get('description'):
+            camps = camps.filter(description__contains=request.query_params.get('description'))
+        if request.query_params.get('price'):
+            camps = camps.filter(price__contains=request.query_params.get('price'))
+        if request.query_params.get('category'):
+            camps = camps.filter(category__title__contains=request.query_params.get('category'))
         serializer = CampaignSerializer(camps, many=True)
         return Response(serializer.data)
 

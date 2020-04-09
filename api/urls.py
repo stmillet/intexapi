@@ -7,5 +7,5 @@ urlpatterns = [
     path('user/', UserInfoList.as_view()),
     path('predict/', PredictList.as_view()),
     path('campaigns/', CampaignList.as_view()),
-    path('search/', CampaignSearchList.as_view()),
+    # path('search/', CampaignSearchList.as_view()),
 ]
