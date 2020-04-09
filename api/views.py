@@ -124,11 +124,14 @@ class PredictList(APIView):
         result_donor = int(float(result_donor))
         if result_donor < 0:
             result_donor = 0
+            avg_donor = 0
+        else:
+            avg_donor = round(result_amount/result_donor, 2)
 
         theResults = {
             'amount': result_amount,
             'donor': result_donor,
-            'avg_donor': round(result_amount/result_donor, 2)
+            'avg_donor': avg_donor
         }
         
         

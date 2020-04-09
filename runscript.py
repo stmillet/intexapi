@@ -34,10 +34,65 @@ def main():
             theCamp.is_charity = campaigns[p]['is_charity']
             theCamp.charity_valid = campaigns[p]['charity_valid']
             if campaigns[p]['donators'] != '0':
-                theCamp.avg_donation = round((int(campaigns[p]['current_amount'])/int(campaigns[p]['donators'])), 2)
+                avg_donation = round((int(campaigns[p]['current_amount'])/int(campaigns[p]['donators'])), 2)
+                theCamp.avg_donation = avg_donation
             else:
-                theCamp.avg_donation = 0
+                avg_donation = 0
+                theCamp.avg_donation = avg_donation
+
+            theScore = 0
+            if int(campaigns[p]['donators']) < 2:
+                theScore += 0
+            elif int(campaigns[p]['donators']) < 10:
+                theScore += 0.5
+            elif int(campaigns[p]['donators']) < 25:
+                theScore += 1
+            elif int(campaigns[p]['donators']) < 50:
+                theScore += 1.5
+            elif int(campaigns[p]['donators']) < 100:
+                theScore += 2
+            elif int(campaigns[p]['donators']) < 200:
+                theScore += 2.5
+            elif int(campaigns[p]['donators']) < 500:
+                theScore += 3
+            elif int(campaigns[p]['donators']) < 1000:
+                theScore += 3.5
+            elif int(campaigns[p]['donators']) < 2000:
+                theScore += 4
+            elif int(campaigns[p]['donators']) < 10000:
+                theScore += 4.5
+            elif int(campaigns[p]['donators']) > 10000:
+                theScore += 5
+
+            if int(avg_donation) < 5:
+                theScore += 0
+            elif int(avg_donation) < 10:
+                theScore += 0.5
+            elif int(avg_donation) < 15:
+                theScore += 1
+            elif int(avg_donation) < 20:
+                theScore += 1.5
+            elif int(avg_donation) < 30:
+                theScore += 2
+            elif int(avg_donation) < 50:
+                theScore += 2.5
+            elif int(avg_donation) < 75:
+                theScore += 3
+            elif int(avg_donation) < 125:
+                theScore += 3.5
+            elif int(avg_donation) < 200:
+                theScore += 4
+            elif int(avg_donation) < 500:
+                theScore += 4.5
+            elif int(avg_donation) > 500:
+                theScore += 5
+            theCamp.c_rating = theScore
+
+
+
+
             theCamp.save()
+            print(p, theScore)
     else:
         print('Already loaded')
 
